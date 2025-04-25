@@ -1,9 +1,8 @@
-import AuthComponent from "@/components/other/AuthComponent";
-
-
+// app/page.tsx
 export default function Home() {
   return (
-    <AuthComponent/>
+    <div className="min-h-screen flex items-center justify-center">
+      <h1 className="text-4xl font-bold">Welcome to LeaveEase</h1>
+    </div>
   )
 }
- 
