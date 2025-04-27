@@ -1,6 +1,4 @@
-import { getCurrentUser } from "@/lib/session";
-import { prisma } from '@/lib/prisma';
-import { Role } from "@prisma/client";
+import { prisma } from '@/lib/prisma'; // Ensure the correct import
 import { NextRequest, NextResponse } from "next/server";
 
 type SubmittedCredits = {
@@ -16,19 +14,16 @@ type SubmittedCredits = {
   name: string;
 };
 
-const allowedRoles = ["ADMIN", "MODERATOR"];
-
 export async function POST(req: NextRequest) {
-  const loggedInUser = await getCurrentUser();
-  if (!allowedRoles.includes(loggedInUser?.role as Role)) {
-    throw new Error("You are not permitted to perform this action");
-  }
-
-  if (!prisma) {
-    throw new Error("Prisma client is not initialized");
-  }
-
   try {
+    if (!prisma) {
+      // Check if prisma is undefined
+      return NextResponse.json(
+        { error: "Prisma client not initialized" },
+        { status: 500 }
+      );
+    }
+
     const body: SubmittedCredits = await req.json();
 
     const {
