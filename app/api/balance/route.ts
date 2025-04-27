@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma"; // <--- ADD THIS LINE
+import { prisma } from '@/lib/prisma';
 import { Role } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
