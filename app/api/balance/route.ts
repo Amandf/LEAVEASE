@@ -1,29 +1,30 @@
 import { getCurrentUser } from "@/lib/session";
+import { prisma } from "@/lib/prisma"; // <--- ADD THIS LINE
 import { Role } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-
 type SubmittedCredits = {
-    annual: number;
-    family: number;
-    health: number;
-    study: number;
-    maternity: number;
-    paternity: number;
-    unpaid: number;
-    email: string;
-    year: string;
-    name: string;
-  };
+  annual: number;
+  family: number;
+  health: number;
+  study: number;
+  maternity: number;
+  paternity: number;
+  unpaid: number;
+  email: string;
+  year: string;
+  name: string;
+};
 
 const allowedRoles = ["ADMIN", "MODERATOR"];
 
-export async function POST(req:NextRequest) {
-    const loggedInUser = await getCurrentUser();
-    if (!allowedRoles.includes(loggedInUser?.role as Role)) {
-      throw new Error("You are not permitted to perform this action");
-    }
-try {
+export async function POST(req: NextRequest) {
+  const loggedInUser = await getCurrentUser();
+  if (!allowedRoles.includes(loggedInUser?.role as Role)) {
+    throw new Error("You are not permitted to perform this action");
+  }
+
+  try {
     const body: SubmittedCredits = await req.json();
 
     const {
@@ -65,15 +66,13 @@ try {
         paternityCredit: paternity,
       },
     });
-    
-    return  NextResponse.json({ message: "Success" }, { status: 200 });
-} catch (error) {
+
+    return NextResponse.json({ message: "Success" }, { status: 200 });
+  } catch (error) {
     console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
-}
-    
-    
+  }
 }
