@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma"; // Ensure the correct import
+import prisma from "@/lib/prisma";
 
 // Your existing code that uses prisma follows...
 
