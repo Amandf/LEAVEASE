@@ -1,31 +1,26 @@
 import { Role } from "@prisma/client";
-import { DefaultSession } from "next-auth";
-import { JWT } from "next-auth/jwt";
-
-declare module "next-auth/jwt" {
-  /** Returned by the `jwt` callback , when using JWT sessions */
-  interface JWT {
-    role?: Role;
-  }
-}
+import { DefaultSession, DefaultUser } from "next-auth";
+import { DefaultJWT } from "next-auth/jwt";
 
 declare module "next-auth" {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the
-   * `SessionProvider` React Context and trpc context
-   */
-  interface Session {
-    user?: {
-      role?: Role;
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+      role: Role;
     } & DefaultSession["user"];
+    accessToken?: string;
   }
 
-  /** Passed as a parameter to the `jwt` callback */
-  interface User {
-    role?: Role;
+  interface User extends DefaultUser {
+    role: Role;
+    id: string;
   }
 }
 
-
-// https://reacthustle.com/blog/nextjs-setup-role-based-authentication
-// https://authjs.dev/guides/basics/role-based-access-control 
+declare module "next-auth/jwt" {
+  interface JWT extends DefaultJWT {
+    id: string;
+    role: Role;
+    accessToken?: string;
+  }
+}
