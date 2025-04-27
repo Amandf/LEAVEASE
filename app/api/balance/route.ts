@@ -24,6 +24,10 @@ export async function POST(req: NextRequest) {
     throw new Error("You are not permitted to perform this action");
   }
 
+  if (!prisma) {
+    throw new Error("Prisma client is not initialized");
+  }
+
   try {
     const body: SubmittedCredits = await req.json();
 
